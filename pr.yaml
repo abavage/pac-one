@@ -1,0 +1,830 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  annotations:
+    chains.tekton.dev/signed: "true"
+    pipelinesascode.tekton.dev/branch: main
+    pipelinesascode.tekton.dev/check-run-id: "52207883547"
+    pipelinesascode.tekton.dev/controller-info: '{"name":"default","configmap":"pipelines-as-code","secret":"pipelines-as-code-secret",
+      "gRepo": "pipelines-as-code"}'
+    pipelinesascode.tekton.dev/event-type: pull_request
+    pipelinesascode.tekton.dev/git-auth-secret: pac-gitauth-ytycdg
+    pipelinesascode.tekton.dev/git-provider: github
+    pipelinesascode.tekton.dev/installation-id: "89162774"
+    pipelinesascode.tekton.dev/log-url: https://console-openshift-console.apps.rosa.one.cb1x.p3.openshiftapps.com/k8s/ns/test-app/tekton.dev~v1~PipelineRun/pac-one-8mlcl
+    pipelinesascode.tekton.dev/max-keep-runs: "5"
+    pipelinesascode.tekton.dev/on-event: '[pull_request, push]'
+    pipelinesascode.tekton.dev/on-target-branch: '[main]'
+    pipelinesascode.tekton.dev/original-prname: pac-one
+    pipelinesascode.tekton.dev/pull-request: "1"
+    pipelinesascode.tekton.dev/repo-url: https://github.com/abavage/pac-one
+    pipelinesascode.tekton.dev/repository: abavage-pac-one
+    pipelinesascode.tekton.dev/scm-reporting-plr-started: "true"
+    pipelinesascode.tekton.dev/sender: abavage
+    pipelinesascode.tekton.dev/sha: 7c46c666760dd72f4bf7083f019a42503b4025aa
+    pipelinesascode.tekton.dev/sha-title: fix the typo
+    pipelinesascode.tekton.dev/sha-url: https://github.com/abavage/pac-one/commit/7c46c666760dd72f4bf7083f019a42503b4025aa
+    pipelinesascode.tekton.dev/source-branch: tektonci
+    pipelinesascode.tekton.dev/source-repo-url: https://github.com/abavage/pac-one
+    pipelinesascode.tekton.dev/state: completed
+    pipelinesascode.tekton.dev/task: git-clone
+    pipelinesascode.tekton.dev/task-1: golangci-lint
+    pipelinesascode.tekton.dev/url-org: abavage
+    pipelinesascode.tekton.dev/url-repository: pac-one
+    results.tekton.dev/record: test-app/results/d7ff523f-98e7-423b-845e-dff7bf779e14/records/d7ff523f-98e7-423b-845e-dff7bf779e14
+    results.tekton.dev/recordSummaryAnnotations: '{"repo":"pac-one","commit":"7c46c666760dd72f4bf7083f019a42503b4025aa","eventType":"pull_request","pull_request-id":1}'
+    results.tekton.dev/result: test-app/results/d7ff523f-98e7-423b-845e-dff7bf779e14
+    results.tekton.dev/stored: "true"
+  creationTimestamp: "2025-10-08T02:20:36Z"
+  finalizers:
+  - results.tekton.dev/pipelinerun
+  - chains.tekton.dev/pipelinerun
+  - pipelinesascode.tekton.dev/finalizer
+  generateName: pac-one-
+  generation: 1
+  labels:
+    app.kubernetes.io/managed-by: pipelinesascode.tekton.dev
+    app.kubernetes.io/version: v0.37.0
+    pipelinesascode.tekton.dev/check-run-id: "52207883547"
+    pipelinesascode.tekton.dev/event-type: pull_request
+    pipelinesascode.tekton.dev/original-prname: pac-one
+    pipelinesascode.tekton.dev/pull-request: "1"
+    pipelinesascode.tekton.dev/repository: abavage-pac-one
+    pipelinesascode.tekton.dev/sha: 7c46c666760dd72f4bf7083f019a42503b4025aa
+    pipelinesascode.tekton.dev/state: completed
+    pipelinesascode.tekton.dev/url-org: abavage
+    pipelinesascode.tekton.dev/url-repository: pac-one
+    tekton.dev/pipeline: pac-one-8mlcl
+  name: pac-one-8mlcl
+  namespace: test-app
+  resourceVersion: "194210"
+  uid: d7ff523f-98e7-423b-845e-dff7bf779e14
+spec:
+  params:
+  - name: repo_url
+    value: https://github.com/abavage/pac-one
+  - name: revision
+    value: 7c46c666760dd72f4bf7083f019a42503b4025aa
+  pipelineSpec:
+    params:
+    - name: repo_url
+      type: string
+    - name: revision
+      type: string
+    tasks:
+    - name: fetch-repository
+      params:
+      - name: url
+        value: $(params.repo_url)
+      - name: revision
+        value: $(params.revision)
+      taskSpec:
+        description: |-
+          These Tasks are Git tasks to work with repositories used by other tasks in your Pipeline.
+          The git-clone Task will clone a repo from the provided url into the output Workspace. By default the repo will be cloned into the root of your Workspace. You can clone into a subdirectory by setting this Task's subdirectory param. This Task also supports sparse checkouts. To perform a sparse checkout, pass a list of comma separated directory patterns to this Task's sparseCheckoutDirectories param.
+        metadata:
+          annotations:
+            tekton.dev/categories: Git
+            tekton.dev/displayName: git clone
+            tekton.dev/pipelines.minVersion: 0.38.0
+            tekton.dev/platforms: linux/amd64,linux/s390x,linux/ppc64le,linux/arm64
+            tekton.dev/tags: git
+          labels:
+            app.kubernetes.io/version: "0.10"
+        params:
+        - description: Repository URL to clone from.
+          name: url
+          type: string
+        - default: ""
+          description: Revision to checkout. (branch, tag, sha, ref, etc...)
+          name: revision
+          type: string
+        - default: ""
+          description: Refspec to fetch before checking out revision.
+          name: refspec
+          type: string
+        - default: "true"
+          description: Initialize and fetch git submodules.
+          name: submodules
+          type: string
+        - default: "1"
+          description: Perform a shallow clone, fetching only the most recent N commits.
+          name: depth
+          type: string
+        - default: "true"
+          description: Set the `http.sslVerify` global git config. Setting this to
+            `false` is not advised unless you are sure that you trust your git remote.
+          name: sslVerify
+          type: string
+        - default: ca-bundle.crt
+          description: file name of mounted crt using ssl-ca-directory workspace.
+            default value is ca-bundle.crt.
+          name: crtFileName
+          type: string
+        - default: ""
+          description: Subdirectory inside the `output` Workspace to clone the repo
+            into.
+          name: subdirectory
+          type: string
+        - default: ""
+          description: Define the directory patterns to match or exclude when performing
+            a sparse checkout.
+          name: sparseCheckoutDirectories
+          type: string
+        - default: "true"
+          description: Clean out the contents of the destination directory if it already
+            exists before cloning.
+          name: deleteExisting
+          type: string
+        - default: ""
+          description: HTTP proxy server for non-SSL requests.
+          name: httpProxy
+          type: string
+        - default: ""
+          description: HTTPS proxy server for SSL requests.
+          name: httpsProxy
+          type: string
+        - default: ""
+          description: Opt out of proxying HTTP/HTTPS requests.
+          name: noProxy
+          type: string
+        - default: "true"
+          description: Log the commands that are executed during `git-clone`'s operation.
+          name: verbose
+          type: string
+        - default: ghcr.io/tektoncd-catalog/git-clone:v1.1.0
+          description: The image providing the git-init binary that this Task runs.
+          name: gitInitImage
+          type: string
+        - default: /home/git
+          description: |
+            Absolute path to the user's home directory.
+          name: userHome
+          type: string
+        results:
+        - description: The precise commit SHA that was fetched by this Task.
+          name: commit
+          type: string
+        - description: The precise URL that was fetched by this Task.
+          name: url
+          type: string
+        - description: The epoch timestamp of the commit that was fetched by this
+            Task.
+          name: committer-date
+          type: string
+        spec: null
+        steps:
+        - computeResources: {}
+          env:
+          - name: HOME
+            value: $(params.userHome)
+          - name: PARAM_URL
+            value: $(params.url)
+          - name: PARAM_REVISION
+            value: $(params.revision)
+          - name: PARAM_REFSPEC
+            value: $(params.refspec)
+          - name: PARAM_SUBMODULES
+            value: $(params.submodules)
+          - name: PARAM_DEPTH
+            value: $(params.depth)
+          - name: PARAM_SSL_VERIFY
+            value: $(params.sslVerify)
+          - name: PARAM_CRT_FILENAME
+            value: $(params.crtFileName)
+          - name: PARAM_SUBDIRECTORY
+            value: $(params.subdirectory)
+          - name: PARAM_DELETE_EXISTING
+            value: $(params.deleteExisting)
+          - name: PARAM_HTTP_PROXY
+            value: $(params.httpProxy)
+          - name: PARAM_HTTPS_PROXY
+            value: $(params.httpsProxy)
+          - name: PARAM_NO_PROXY
+            value: $(params.noProxy)
+          - name: PARAM_VERBOSE
+            value: $(params.verbose)
+          - name: PARAM_SPARSE_CHECKOUT_DIRECTORIES
+            value: $(params.sparseCheckoutDirectories)
+          - name: PARAM_USER_HOME
+            value: $(params.userHome)
+          - name: WORKSPACE_OUTPUT_PATH
+            value: $(workspaces.output.path)
+          - name: WORKSPACE_SSH_DIRECTORY_BOUND
+            value: $(workspaces.ssh-directory.bound)
+          - name: WORKSPACE_SSH_DIRECTORY_PATH
+            value: $(workspaces.ssh-directory.path)
+          - name: WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND
+            value: $(workspaces.basic-auth.bound)
+          - name: WORKSPACE_BASIC_AUTH_DIRECTORY_PATH
+            value: $(workspaces.basic-auth.path)
+          - name: WORKSPACE_SSL_CA_DIRECTORY_BOUND
+            value: $(workspaces.ssl-ca-directory.bound)
+          - name: WORKSPACE_SSL_CA_DIRECTORY_PATH
+            value: $(workspaces.ssl-ca-directory.path)
+          image: $(params.gitInitImage)
+          name: clone
+          script: |
+            #!/usr/bin/env sh
+            set -eu
+
+            if [ "${PARAM_VERBOSE}" = "true" ] ; then
+              set -x
+            fi
+
+            if [ "${WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND}" = "true" ] ; then
+              cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.git-credentials" "${PARAM_USER_HOME}/.git-credentials"
+              cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.gitconfig" "${PARAM_USER_HOME}/.gitconfig"
+              chmod 400 "${PARAM_USER_HOME}/.git-credentials"
+              chmod 400 "${PARAM_USER_HOME}/.gitconfig"
+            fi
+
+            if [ "${WORKSPACE_SSH_DIRECTORY_BOUND}" = "true" ] ; then
+              cp -R "${WORKSPACE_SSH_DIRECTORY_PATH}" "${PARAM_USER_HOME}"/.ssh
+              chmod 700 "${PARAM_USER_HOME}"/.ssh
+              chmod -R 400 "${PARAM_USER_HOME}"/.ssh/*
+            fi
+
+            if [ "${WORKSPACE_SSL_CA_DIRECTORY_BOUND}" = "true" ] ; then
+               export GIT_SSL_CAPATH="${WORKSPACE_SSL_CA_DIRECTORY_PATH}"
+               if [ "${PARAM_CRT_FILENAME}" != "" ] ; then
+                  export GIT_SSL_CAINFO="${WORKSPACE_SSL_CA_DIRECTORY_PATH}/${PARAM_CRT_FILENAME}"
+               fi
+            fi
+            CHECKOUT_DIR="${WORKSPACE_OUTPUT_PATH}/${PARAM_SUBDIRECTORY}"
+
+            cleandir() {
+              # Delete any existing contents of the repo directory if it exists.
+              #
+              # We don't just "rm -rf ${CHECKOUT_DIR}" because ${CHECKOUT_DIR} might be "/"
+              # or the root of a mounted volume.
+              if [ -d "${CHECKOUT_DIR}" ] ; then
+                # Delete non-hidden files and directories
+                rm -rf "${CHECKOUT_DIR:?}"/*
+                # Delete files and directories starting with . but excluding ..
+                rm -rf "${CHECKOUT_DIR}"/.[!.]*
+                # Delete files and directories starting with .. plus any other character
+                rm -rf "${CHECKOUT_DIR}"/..?*
+              fi
+            }
+
+            if [ "${PARAM_DELETE_EXISTING}" = "true" ] ; then
+              cleandir || true
+            fi
+
+            test -z "${PARAM_HTTP_PROXY}" || export HTTP_PROXY="${PARAM_HTTP_PROXY}"
+            test -z "${PARAM_HTTPS_PROXY}" || export HTTPS_PROXY="${PARAM_HTTPS_PROXY}"
+            test -z "${PARAM_NO_PROXY}" || export NO_PROXY="${PARAM_NO_PROXY}"
+
+            git config --global --add safe.directory "${WORKSPACE_OUTPUT_PATH}"
+            /ko-app/git-init \
+              -url="${PARAM_URL}" \
+              -revision="${PARAM_REVISION}" \
+              -refspec="${PARAM_REFSPEC}" \
+              -path="${CHECKOUT_DIR}" \
+              -sslVerify="${PARAM_SSL_VERIFY}" \
+              -submodules="${PARAM_SUBMODULES}" \
+              -depth="${PARAM_DEPTH}" \
+              -sparseCheckoutDirectories="${PARAM_SPARSE_CHECKOUT_DIRECTORIES}"
+            cd "${CHECKOUT_DIR}"
+            RESULT_SHA="$(git rev-parse HEAD)"
+            EXIT_CODE="$?"
+            if [ "${EXIT_CODE}" != 0 ] ; then
+              exit "${EXIT_CODE}"
+            fi
+            RESULT_COMMITTER_DATE="$(git log -1 --pretty=%ct)"
+            printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
+            printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
+            printf "%s" "${PARAM_URL}" > "$(results.url.path)"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+          volumeMounts:
+          - mountPath: $(params.userHome)
+            name: user-home
+        volumes:
+        - emptyDir: {}
+          name: user-home
+        workspaces:
+        - description: The git repo will be cloned onto the volume backing this Workspace.
+          name: output
+        - description: |
+            A .ssh directory with private key, known_hosts, config, etc. Copied to
+            the user's home before git commands are executed. Used to authenticate
+            with the git remote when performing the clone. Binding a Secret to this
+            Workspace is strongly recommended over other volume types.
+          name: ssh-directory
+          optional: true
+        - description: |
+            A Workspace containing a .gitconfig and .git-credentials file. These
+            will be copied to the user's home before any git commands are run. Any
+            other files in this Workspace are ignored. It is strongly recommended
+            to use ssh-directory over basic-auth whenever possible and to bind a
+            Secret to this Workspace over other volume types.
+          name: basic-auth
+          optional: true
+        - description: |
+            A workspace containing CA certificates, this will be used by Git to
+            verify the peer with when fetching or pushing over HTTPS.
+          name: ssl-ca-directory
+          optional: true
+      workspaces:
+      - name: output
+        workspace: source
+      - name: basic-auth
+        workspace: basic-auth
+
+    - name: golangci-lint
+      params:
+      - name: package
+        value: .
+      runAfter:
+      - fetch-repository
+      taskSpec:
+        description: This Task is Golang task to validate Go projects.
+        metadata:
+          annotations:
+            tekton.dev/categories: Code Quality
+            tekton.dev/displayName: golangci lint
+            tekton.dev/pipelines.minVersion: 0.12.1
+            tekton.dev/platforms: linux/amd64
+            tekton.dev/tags: lint
+          labels:
+            app.kubernetes.io/version: "0.2"
+        params:
+        - description: base package (and its children) under validation
+          name: package
+          type: string
+        - default: .
+          description: path to the directory to use as context.
+          name: context
+          type: string
+        - default: --verbose
+          description: flags to use for the test command
+          name: flags
+          type: string
+        - default: v1.39
+          description: golangci-lint version to use
+          name: version
+          type: string
+        - default: linux
+          description: running operating system target
+          name: GOOS
+          type: string
+        - default: amd64
+          description: running architecture target
+          name: GOARCH
+          type: string
+        - default: auto
+          description: value of module support
+          name: GO111MODULE
+          type: string
+        - default: ""
+          description: Go caching directory path
+          name: GOCACHE
+          type: string
+        - default: ""
+          description: Go mod caching directory path
+          name: GOMODCACHE
+          type: string
+        - default: ""
+          description: golangci-lint cache path
+          name: GOLANGCI_LINT_CACHE
+          type: string
+        spec: null
+        steps:
+        - computeResources: {}
+          env:
+          - name: GOPATH
+            value: /workspace
+          - name: GOOS
+            value: $(params.GOOS)
+          - name: GOARCH
+            value: $(params.GOARCH)
+          - name: GO111MODULE
+            value: $(params.GO111MODULE)
+          - name: GOCACHE
+            value: $(params.GOCACHE)
+          - name: GOMODCACHE
+            value: $(params.GOMODCACHE)
+          - name: GOLANGCI_LINT_CACHE
+            value: $(params.GOLANGCI_LINT_CACHE)
+          image: docker.io/golangci/golangci-lint:$(params.version)
+          name: lint
+          script: |
+            golangci-lint run $(params.flags)
+          workingDir: $(workspaces.source.path)/$(params.context)
+        workspaces:
+        - mountPath: /workspace/src/$(params.package)
+          name: source
+      workspaces:
+      - name: source
+        workspace: source
+    workspaces:
+    - name: source
+    - name: basic-auth
+  taskRunTemplate:
+    serviceAccountName: pipeline
+  timeouts:
+    pipeline: 1h0m0s
+  workspaces:
+  - name: source
+    volumeClaimTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+      status: {}
+  - name: basic-auth
+    secret:
+      secretName: pac-gitauth-ytycdg
+status:
+  childReferences:
+  - apiVersion: tekton.dev/v1
+    kind: TaskRun
+    name: pac-one-8mlcl-fetch-repository
+    pipelineTaskName: fetch-repository
+  - apiVersion: tekton.dev/v1
+    kind: TaskRun
+    name: pac-one-8mlcl-golangci-lint
+    pipelineTaskName: golangci-lint
+  completionTime: "2025-10-08T02:21:03Z"
+  conditions:
+  - lastTransitionTime: "2025-10-08T02:21:03Z"
+    message: 'Tasks Completed: 2 (Failed: 0, Cancelled 0), Skipped: 0'
+    reason: Succeeded
+    status: "True"
+    type: Succeeded
+  pipelineSpec:
+    params:
+    - name: repo_url
+      type: string
+    - name: revision
+      type: string
+    tasks:
+    - name: fetch-repository
+      params:
+      - name: url
+        value: https://github.com/abavage/pac-one
+      - name: revision
+        value: 7c46c666760dd72f4bf7083f019a42503b4025aa
+      taskSpec:
+        description: |-
+          These Tasks are Git tasks to work with repositories used by other tasks in your Pipeline.
+          The git-clone Task will clone a repo from the provided url into the output Workspace. By default the repo will be cloned into the root of your Workspace. You can clone into a subdirectory by setting this Task's subdirectory param. This Task also supports sparse checkouts. To perform a sparse checkout, pass a list of comma separated directory patterns to this Task's sparseCheckoutDirectories param.
+        metadata:
+          annotations:
+            tekton.dev/categories: Git
+            tekton.dev/displayName: git clone
+            tekton.dev/pipelines.minVersion: 0.38.0
+            tekton.dev/platforms: linux/amd64,linux/s390x,linux/ppc64le,linux/arm64
+            tekton.dev/tags: git
+          labels:
+            app.kubernetes.io/version: "0.10"
+        params:
+        - description: Repository URL to clone from.
+          name: url
+          type: string
+        - default: ""
+          description: Revision to checkout. (branch, tag, sha, ref, etc...)
+          name: revision
+          type: string
+        - default: ""
+          description: Refspec to fetch before checking out revision.
+          name: refspec
+          type: string
+        - default: "true"
+          description: Initialize and fetch git submodules.
+          name: submodules
+          type: string
+        - default: "1"
+          description: Perform a shallow clone, fetching only the most recent N commits.
+          name: depth
+          type: string
+        - default: "true"
+          description: Set the `http.sslVerify` global git config. Setting this to
+            `false` is not advised unless you are sure that you trust your git remote.
+          name: sslVerify
+          type: string
+        - default: ca-bundle.crt
+          description: file name of mounted crt using ssl-ca-directory workspace.
+            default value is ca-bundle.crt.
+          name: crtFileName
+          type: string
+        - default: ""
+          description: Subdirectory inside the `output` Workspace to clone the repo
+            into.
+          name: subdirectory
+          type: string
+        - default: ""
+          description: Define the directory patterns to match or exclude when performing
+            a sparse checkout.
+          name: sparseCheckoutDirectories
+          type: string
+        - default: "true"
+          description: Clean out the contents of the destination directory if it already
+            exists before cloning.
+          name: deleteExisting
+          type: string
+        - default: ""
+          description: HTTP proxy server for non-SSL requests.
+          name: httpProxy
+          type: string
+        - default: ""
+          description: HTTPS proxy server for SSL requests.
+          name: httpsProxy
+          type: string
+        - default: ""
+          description: Opt out of proxying HTTP/HTTPS requests.
+          name: noProxy
+          type: string
+        - default: "true"
+          description: Log the commands that are executed during `git-clone`'s operation.
+          name: verbose
+          type: string
+        - default: ghcr.io/tektoncd-catalog/git-clone:v1.1.0
+          description: The image providing the git-init binary that this Task runs.
+          name: gitInitImage
+          type: string
+        - default: /home/git
+          description: |
+            Absolute path to the user's home directory.
+          name: userHome
+          type: string
+        results:
+        - description: The precise commit SHA that was fetched by this Task.
+          name: commit
+          type: string
+        - description: The precise URL that was fetched by this Task.
+          name: url
+          type: string
+        - description: The epoch timestamp of the commit that was fetched by this
+            Task.
+          name: committer-date
+          type: string
+        spec: null
+        steps:
+        - computeResources: {}
+          env:
+          - name: HOME
+            value: $(params.userHome)
+          - name: PARAM_URL
+            value: $(params.url)
+          - name: PARAM_REVISION
+            value: 7c46c666760dd72f4bf7083f019a42503b4025aa
+          - name: PARAM_REFSPEC
+            value: $(params.refspec)
+          - name: PARAM_SUBMODULES
+            value: $(params.submodules)
+          - name: PARAM_DEPTH
+            value: $(params.depth)
+          - name: PARAM_SSL_VERIFY
+            value: $(params.sslVerify)
+          - name: PARAM_CRT_FILENAME
+            value: $(params.crtFileName)
+          - name: PARAM_SUBDIRECTORY
+            value: $(params.subdirectory)
+          - name: PARAM_DELETE_EXISTING
+            value: $(params.deleteExisting)
+          - name: PARAM_HTTP_PROXY
+            value: $(params.httpProxy)
+          - name: PARAM_HTTPS_PROXY
+            value: $(params.httpsProxy)
+          - name: PARAM_NO_PROXY
+            value: $(params.noProxy)
+          - name: PARAM_VERBOSE
+            value: $(params.verbose)
+          - name: PARAM_SPARSE_CHECKOUT_DIRECTORIES
+            value: $(params.sparseCheckoutDirectories)
+          - name: PARAM_USER_HOME
+            value: $(params.userHome)
+          - name: WORKSPACE_OUTPUT_PATH
+            value: $(workspaces.output.path)
+          - name: WORKSPACE_SSH_DIRECTORY_BOUND
+            value: $(workspaces.ssh-directory.bound)
+          - name: WORKSPACE_SSH_DIRECTORY_PATH
+            value: $(workspaces.ssh-directory.path)
+          - name: WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND
+            value: "true"
+          - name: WORKSPACE_BASIC_AUTH_DIRECTORY_PATH
+            value: $(workspaces.basic-auth.path)
+          - name: WORKSPACE_SSL_CA_DIRECTORY_BOUND
+            value: $(workspaces.ssl-ca-directory.bound)
+          - name: WORKSPACE_SSL_CA_DIRECTORY_PATH
+            value: $(workspaces.ssl-ca-directory.path)
+          image: $(params.gitInitImage)
+          name: clone
+          script: |
+            #!/usr/bin/env sh
+            set -eu
+
+            if [ "${PARAM_VERBOSE}" = "true" ] ; then
+              set -x
+            fi
+
+            if [ "${WORKSPACE_BASIC_AUTH_DIRECTORY_BOUND}" = "true" ] ; then
+              cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.git-credentials" "${PARAM_USER_HOME}/.git-credentials"
+              cp "${WORKSPACE_BASIC_AUTH_DIRECTORY_PATH}/.gitconfig" "${PARAM_USER_HOME}/.gitconfig"
+              chmod 400 "${PARAM_USER_HOME}/.git-credentials"
+              chmod 400 "${PARAM_USER_HOME}/.gitconfig"
+            fi
+
+            if [ "${WORKSPACE_SSH_DIRECTORY_BOUND}" = "true" ] ; then
+              cp -R "${WORKSPACE_SSH_DIRECTORY_PATH}" "${PARAM_USER_HOME}"/.ssh
+              chmod 700 "${PARAM_USER_HOME}"/.ssh
+              chmod -R 400 "${PARAM_USER_HOME}"/.ssh/*
+            fi
+
+            if [ "${WORKSPACE_SSL_CA_DIRECTORY_BOUND}" = "true" ] ; then
+               export GIT_SSL_CAPATH="${WORKSPACE_SSL_CA_DIRECTORY_PATH}"
+               if [ "${PARAM_CRT_FILENAME}" != "" ] ; then
+                  export GIT_SSL_CAINFO="${WORKSPACE_SSL_CA_DIRECTORY_PATH}/${PARAM_CRT_FILENAME}"
+               fi
+            fi
+            CHECKOUT_DIR="${WORKSPACE_OUTPUT_PATH}/${PARAM_SUBDIRECTORY}"
+
+            cleandir() {
+              # Delete any existing contents of the repo directory if it exists.
+              #
+              # We don't just "rm -rf ${CHECKOUT_DIR}" because ${CHECKOUT_DIR} might be "/"
+              # or the root of a mounted volume.
+              if [ -d "${CHECKOUT_DIR}" ] ; then
+                # Delete non-hidden files and directories
+                rm -rf "${CHECKOUT_DIR:?}"/*
+                # Delete files and directories starting with . but excluding ..
+                rm -rf "${CHECKOUT_DIR}"/.[!.]*
+                # Delete files and directories starting with .. plus any other character
+                rm -rf "${CHECKOUT_DIR}"/..?*
+              fi
+            }
+
+            if [ "${PARAM_DELETE_EXISTING}" = "true" ] ; then
+              cleandir || true
+            fi
+
+            test -z "${PARAM_HTTP_PROXY}" || export HTTP_PROXY="${PARAM_HTTP_PROXY}"
+            test -z "${PARAM_HTTPS_PROXY}" || export HTTPS_PROXY="${PARAM_HTTPS_PROXY}"
+            test -z "${PARAM_NO_PROXY}" || export NO_PROXY="${PARAM_NO_PROXY}"
+
+            git config --global --add safe.directory "${WORKSPACE_OUTPUT_PATH}"
+            /ko-app/git-init \
+              -url="${PARAM_URL}" \
+              -revision="${PARAM_REVISION}" \
+              -refspec="${PARAM_REFSPEC}" \
+              -path="${CHECKOUT_DIR}" \
+              -sslVerify="${PARAM_SSL_VERIFY}" \
+              -submodules="${PARAM_SUBMODULES}" \
+              -depth="${PARAM_DEPTH}" \
+              -sparseCheckoutDirectories="${PARAM_SPARSE_CHECKOUT_DIRECTORIES}"
+            cd "${CHECKOUT_DIR}"
+            RESULT_SHA="$(git rev-parse HEAD)"
+            EXIT_CODE="$?"
+            if [ "${EXIT_CODE}" != 0 ] ; then
+              exit "${EXIT_CODE}"
+            fi
+            RESULT_COMMITTER_DATE="$(git log -1 --pretty=%ct)"
+            printf "%s" "${RESULT_COMMITTER_DATE}" > "$(results.committer-date.path)"
+            printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
+            printf "%s" "${PARAM_URL}" > "$(results.url.path)"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+          volumeMounts:
+          - mountPath: $(params.userHome)
+            name: user-home
+        volumes:
+        - emptyDir: {}
+          name: user-home
+        workspaces:
+        - description: The git repo will be cloned onto the volume backing this Workspace.
+          name: output
+        - description: |
+            A .ssh directory with private key, known_hosts, config, etc. Copied to
+            the user's home before git commands are executed. Used to authenticate
+            with the git remote when performing the clone. Binding a Secret to this
+            Workspace is strongly recommended over other volume types.
+          name: ssh-directory
+          optional: true
+        - description: |
+            A Workspace containing a .gitconfig and .git-credentials file. These
+            will be copied to the user's home before any git commands are run. Any
+            other files in this Workspace are ignored. It is strongly recommended
+            to use ssh-directory over basic-auth whenever possible and to bind a
+            Secret to this Workspace over other volume types.
+          name: basic-auth
+          optional: true
+        - description: |
+            A workspace containing CA certificates, this will be used by Git to
+            verify the peer with when fetching or pushing over HTTPS.
+          name: ssl-ca-directory
+          optional: true
+      workspaces:
+      - name: output
+        workspace: source
+      - name: basic-auth
+        workspace: basic-auth
+    - name: golangci-lint
+      params:
+      - name: package
+        value: .
+      runAfter:
+      - fetch-repository
+      taskSpec:
+        description: This Task is Golang task to validate Go projects.
+        metadata:
+          annotations:
+            tekton.dev/categories: Code Quality
+            tekton.dev/displayName: golangci lint
+            tekton.dev/pipelines.minVersion: 0.12.1
+            tekton.dev/platforms: linux/amd64
+            tekton.dev/tags: lint
+          labels:
+            app.kubernetes.io/version: "0.2"
+        params:
+        - description: base package (and its children) under validation
+          name: package
+          type: string
+        - default: .
+          description: path to the directory to use as context.
+          name: context
+          type: string
+        - default: --verbose
+          description: flags to use for the test command
+          name: flags
+          type: string
+        - default: v1.39
+          description: golangci-lint version to use
+          name: version
+          type: string
+        - default: linux
+          description: running operating system target
+          name: GOOS
+          type: string
+        - default: amd64
+          description: running architecture target
+          name: GOARCH
+          type: string
+        - default: auto
+          description: value of module support
+          name: GO111MODULE
+          type: string
+        - default: ""
+          description: Go caching directory path
+          name: GOCACHE
+          type: string
+        - default: ""
+          description: Go mod caching directory path
+          name: GOMODCACHE
+          type: string
+        - default: ""
+          description: golangci-lint cache path
+          name: GOLANGCI_LINT_CACHE
+          type: string
+        spec: null
+        steps:
+        - computeResources: {}
+          env:
+          - name: GOPATH
+            value: /workspace
+          - name: GOOS
+            value: $(params.GOOS)
+          - name: GOARCH
+            value: $(params.GOARCH)
+          - name: GO111MODULE
+            value: $(params.GO111MODULE)
+          - name: GOCACHE
+            value: $(params.GOCACHE)
+          - name: GOMODCACHE
+            value: $(params.GOMODCACHE)
+          - name: GOLANGCI_LINT_CACHE
+            value: $(params.GOLANGCI_LINT_CACHE)
+          image: docker.io/golangci/golangci-lint:$(params.version)
+          name: lint
+          script: |
+            golangci-lint run $(params.flags)
+          workingDir: $(workspaces.source.path)/$(params.context)
+        workspaces:
+        - mountPath: /workspace/src/$(params.package)
+          name: source
+      workspaces:
+      - name: source
+        workspace: source
+    workspaces:
+    - name: source
+    - name: basic-auth
+  provenance:
+    featureFlags:
+      awaitSidecarReadiness: true
+      coschedule: workspaces
+      enableAPIFields: beta
+      enableProvenanceInStatus: true
+      enforceNonfalsifiability: none
+      maxResultSize: 4096
+      resultExtractionMethod: termination-message
+      runningInEnvWithInjectedSidecars: true
+      verificationNoMatchPolicy: ignore
+  startTime: "2025-10-08T02:20:36Z"
